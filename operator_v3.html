@@ -250,6 +250,16 @@ input,select,textarea,button { font-family:inherit; }
      V0 — GİRİŞ
 ══════════════════════════════════ -->
 <div class="view on" id="v0">
+  <div class="sbar">
+    <div class="sbar-logo">APS</div>
+    <div class="sbar-div"></div>
+    <div class="sbar-info">
+      <div class="sbar-title">Operatör Girişi</div>
+      <div class="sbar-sub" id="v0date">—</div>
+    </div>
+    <div class="sbar-time" id="v0clock">—</div>
+    <div class="gear-btn" onclick="openSheet()" title="Ayarlar">⚙</div>
+  </div>
   <div class="scrl">
     <div class="login-wrap">
       <div class="login-logo">APS</div>
@@ -494,7 +504,7 @@ input,select,textarea,button { font-family:inherit; }
 const TEZGAHLAR_DEF = ["AF-1","AF-2","AF-3","AF-4","AF-5","AT-1","AT-2","AT-3","AT-4","AT-5","A5-1","A5-2","A5-3","A5-4","Tesviye","CMM","MANUEL KONTROL"];
 const DURUSLAR = [{k:"D01",d:"Makine Arıza"},{k:"D03",d:"Takım Değiştirme"},{k:"D04",d:"Ayar/Setup"},{k:"D05",d:"Malzeme Bekleme"},{k:"D06",d:"Parça Bekleme"},{k:"D07",d:"CMM Bekleme"},{k:"D08",d:"İş Yok"},{k:"D09",d:"Bakım"},{k:"D10",d:"Yemek/Mola"}];
 
-let CFG   = { url:"", tezgahlar:[] };
+let CFG   = { url: "https://script.google.com/macros/s/AKfycbxFBE_-swxvmyAtXmjBaZvkovMIdg6zrDlHqWCWbuNOkn1zpcRjam480lzDYn3AuK0l/exec", tezgahlar:[] };
 let USER  = null;
 let SEL   = { tezgah:"", personel:"", isEmri:"", isData:null };
 let AKTIF = null;
@@ -643,8 +653,9 @@ function startClock(){
     const n=new Date();
     const t=n.toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"});
     const d=n.toLocaleDateString("tr-TR",{weekday:"short",day:"numeric",month:"short"});
-    ["v1clock","v2clock","v3clock"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t;});
+    ["v0clock","v1clock","v2clock","v3clock"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t;});
     const ds=document.getElementById("v1date");if(ds)ds.textContent=d;
+    const d0=document.getElementById("v0date");if(d0)d0.textContent=d;
   };
   upd(); setInterval(upd,5000);
 }
