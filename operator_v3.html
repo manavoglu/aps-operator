@@ -5,763 +5,722 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#111318">
-<title>APS</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<title>APS Operatör</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:      #111318;
-  --s1:      #1a1e27;
-  --s2:      #222839;
-  --s3:      #2a3248;
-  --bd:      rgba(255,255,255,.08);
-  --bd2:     rgba(255,255,255,.14);
-  --tx:      #f0f2f8;
-  --tx2:     #8b95b0;
-  --tx3:     #4a5470;
-  --grn:     #2ecc71;
-  --grn2:    #27ae60;
-  --red:     #e74c3c;
-  --red2:    #c0392b;
-  --amb:     #f39c12;
-  --amb2:    #e67e22;
-  --blu:     #3498db;
-  --orn:     #e67e22;
-  --r8:      8px;
-  --r12:     12px;
-  --r16:     16px;
-  --safe-b:  env(safe-area-inset-bottom, 0px);
+  --bg:#111318; --s1:#1a1e27; --s2:#222839; --s3:#2a3248;
+  --bd:rgba(255,255,255,.08); --bd2:rgba(255,255,255,.14);
+  --tx:#f0f2f8; --tx2:#8b95b0; --tx3:#4a5470;
+  --grn:#2ecc71; --grn2:#27ae60; --red:#e74c3c; --red2:#c0392b;
+  --amb:#f39c12; --blu:#3498db; --orn:#e67e22;
+  --r8:8px; --r12:12px; --r16:16px;
 }
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-html,body { height:100%; overflow:hidden; background:var(--bg); }
-body { font-family:'Barlow',sans-serif; color:var(--tx); overscroll-behavior:none; }
-input,select,textarea,button { font-family:inherit; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:var(--bg);}
+body{font-family:'Barlow',sans-serif;color:var(--tx);overscroll-behavior:none;}
 
-/* ── VIEWS ── */
-.view { position:fixed; inset:0; display:flex; flex-direction:column; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; }
-.view.on { opacity:1; pointer-events:all; }
-.view.slide-in  { transform:translateX(100%); }
-.view.on.slide-in { transform:translateX(0); }
+/* VIEWS */
+.view{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;transform:translateX(0);}
+.view.active{opacity:1;pointer-events:all;}
+.view.slide{transform:translateX(100%);}
+.view.slide.active{transform:translateX(0);}
 
-/* ── STATUS BAR ── */
-.sbar { display:flex; align-items:center; gap:10px; padding:10px 14px 8px; background:var(--s1); border-bottom:1px solid var(--bd); flex-shrink:0; }
-.sbar-logo { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:900; color:var(--orn); letter-spacing:1px; line-height:1; }
-.sbar-div { width:1px; height:22px; background:var(--bd2); }
-.sbar-info { flex:1; min-width:0; }
-.sbar-title { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--tx2); }
-.sbar-sub { font-size:14px; font-weight:600; color:var(--tx); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.sbar-time { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; color:var(--tx2); letter-spacing:1px; }
-.back-btn { width:36px; height:36px; border-radius:var(--r8); background:var(--s2); border:1px solid var(--bd); color:var(--tx2); font-size:20px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
-.gear-btn { width:36px; height:36px; border-radius:var(--r8); background:var(--s2); border:1px solid var(--bd); color:var(--tx2); font-size:16px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+/* TOPBAR */
+.top{display:flex;align-items:center;gap:10px;padding:10px 14px 8px;background:var(--s1);border-bottom:1px solid var(--bd);flex-shrink:0;}
+.logo{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--orn);letter-spacing:1px;line-height:1;}
+.vdiv{width:1px;height:22px;background:var(--bd2);}
+.top-info{flex:1;min-width:0;}
+.top-lbl{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx2);}
+.top-sub{font-size:14px;font-weight:600;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.top-time{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--tx2);letter-spacing:1px;}
+.icon-btn{width:36px;height:36px;border-radius:var(--r8);background:var(--s2);border:1px solid var(--bd);color:var(--tx2);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
 
-/* ── SCROLL ── */
-.scrl { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 12px calc(12px + var(--safe-b)); }
-.scrl::-webkit-scrollbar { display:none; }
+/* SCROLL */
+.scrl{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;}
+.scrl::-webkit-scrollbar{display:none;}
 
-/* ═══════════════════════════════════════
-   VIEW 1 — TEZGAH SEÇ
-═══════════════════════════════════════ */
-.personel-row { display:flex; align-items:center; gap:8px; margin-bottom:16px; background:var(--s1); border:1px solid var(--bd); border-radius:var(--r12); padding:10px 14px; }
-.personel-icon { font-size:20px; flex-shrink:0; }
-.personel-sel { flex:1; background:none; border:none; color:var(--tx); font-size:15px; font-weight:600; outline:none; }
-.personel-sel option { background:#1a1e27; }
+/* CARDS */
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r12);padding:14px;margin-bottom:10px;}
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:8px;}
 
-.sec-lbl { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tx3); margin:0 2px 8px; }
+/* BUTTONS */
+.btn{width:100%;padding:17px;border:none;border-radius:var(--r12);font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;transition:transform .1s,opacity .15s;}
+.btn:active{transform:scale(.97);}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn-grn{background:var(--grn2);color:#fff;}
+.btn-red{background:var(--red2);color:#fff;}
+.btn-amb{background:var(--amb);color:#fff;}
+.btn-ghost{background:var(--s2);border:1px solid var(--bd2);color:var(--tx2);}
+.btn-blue{background:var(--s2);border:1px solid var(--bd);color:var(--blu);}
+.btn-row{display:flex;gap:8px;}
+.btn-row .btn{flex:1;padding:13px 8px;font-size:18px;}
 
-.tgrid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:4px; }
-.tcard {
-  background:var(--s1); border:1px solid var(--bd);
-  border-radius:var(--r12); padding:14px 12px 12px;
-  cursor:pointer; transition:all .12s; position:relative;
-  overflow:hidden; text-align:left;
-}
-.tcard:active { transform:scale(.96); background:var(--s2); }
-.tcard.live { border-color:var(--grn); }
-.tcard.live::after { content:''; position:absolute; top:0; right:0; width:8px; height:8px; background:var(--grn); border-radius:0 var(--r12) 0 var(--r8); }
-.tcard-name { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:800; letter-spacing:.5px; color:var(--tx); line-height:1; margin-bottom:4px; }
-.tcard-sub { font-size:11px; color:var(--tx3); display:flex; align-items:center; gap:4px; }
-.tcard-dot { width:6px; height:6px; border-radius:50%; background:var(--tx3); flex-shrink:0; }
-.tcard-dot.on { background:var(--grn); box-shadow:0 0 5px var(--grn); }
+/* LOGIN */
+.login-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;padding:24px 20px;}
+.login-logo{font-family:'Barlow Condensed',sans-serif;font-size:72px;font-weight:900;color:var(--orn);letter-spacing:4px;line-height:1;margin-bottom:4px;}
+.login-tagline{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--tx3);margin-bottom:32px;}
+.login-box{width:100%;max-width:320px;}
+.login-user{background:var(--s1);border:1px solid var(--bd2);border-radius:var(--r12);padding:13px 16px;display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.login-user:focus-within{border-color:var(--orn);}
+.login-user input{flex:1;background:none;border:none;color:var(--tx);font-size:16px;font-weight:600;outline:none;}
+.login-user input::placeholder{color:var(--tx3);}
+.pin-dots{display:flex;gap:14px;justify-content:center;margin-bottom:10px;}
+.pin-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--bd2);transition:all .15s;}
+.pin-dot.on{background:var(--orn);border-color:var(--orn);}
+.pin-dot.err{background:var(--red);border-color:var(--red);}
+.login-err{text-align:center;color:var(--red);font-size:13px;font-weight:600;min-height:18px;margin-bottom:12px;}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
+.pad-btn{padding:17px 8px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r12);font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;color:var(--tx);cursor:pointer;text-align:center;transition:all .1s;}
+.pad-btn:active{transform:scale(.9);background:var(--s2);}
+.pad-btn.del{font-size:20px;color:var(--tx2);}
+.pad-btn.z2{grid-column:span 2;}
 
-/* ═══════════════════════════════════════
-   VIEW 2 — İŞ LİSTESİ
-═══════════════════════════════════════ */
-.mach-hero { background:var(--s1); border:1px solid var(--bd); border-radius:var(--r12); padding:14px 16px; margin-bottom:14px; display:flex; align-items:center; gap:12px; }
-.mach-nm { font-family:'Barlow Condensed',sans-serif; font-size:42px; font-weight:900; color:var(--orn); line-height:1; letter-spacing:1px; }
-.mach-stats { flex:1; }
-.mach-stat { font-size:12px; color:var(--tx2); }
-.mach-stat b { color:var(--tx); }
+/* TEZGAH GRİD */
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.tcard{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r12);padding:14px 12px;cursor:pointer;transition:all .12s;position:relative;overflow:hidden;text-align:left;}
+.tcard:active{transform:scale(.96);}
+.tcard.live{border-color:rgba(46,204,113,.5);}
+.tcard.live::after{content:'';position:absolute;top:0;right:0;width:8px;height:8px;background:var(--grn);border-radius:0 var(--r12) 0 8px;}
+.tcard-name{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;letter-spacing:.5px;color:var(--tx);line-height:1;margin-bottom:3px;}
+.tcard-sub{font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:4px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--tx3);}
+.dot.on{background:var(--grn);box-shadow:0 0 5px var(--grn);}
 
-.srch { width:100%; background:var(--s1); border:1px solid var(--bd); border-radius:var(--r8); padding:10px 14px; font-size:14px; color:var(--tx); outline:none; margin-bottom:12px; }
-.srch:focus { border-color:var(--bd2); }
-.srch::placeholder { color:var(--tx3); }
+/* İŞ KARTLARI */
+.icard{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r12);margin-bottom:8px;overflow:hidden;cursor:pointer;transition:all .12s;display:flex;}
+.icard:active{transform:scale(.985);opacity:.85;}
+.icard.live{border-color:rgba(46,204,113,.4);}
+.icard-bar{width:4px;flex-shrink:0;background:var(--tx3);}
+.icard.live .icard-bar{background:var(--grn);}
+.icard-body{flex:1;padding:11px 12px;min-width:0;}
+.icard-top{display:flex;align-items:baseline;gap:8px;margin-bottom:5px;}
+.icard-no{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:var(--tx);line-height:1;}
+.badge{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:20px;}
+.b-live{background:rgba(46,204,113,.15);color:var(--grn);border:1px solid rgba(46,204,113,.3);}
+.b-new{background:rgba(52,152,219,.15);color:var(--blu);border:1px solid rgba(52,152,219,.3);}
+.b-cont{background:rgba(243,156,18,.15);color:var(--amb);border:1px solid rgba(243,156,18,.3);}
+.icard-parca{font-size:12px;color:var(--tx2);margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.inums{display:flex;}
+.inum{flex:1;text-align:center;border-right:1px solid var(--bd);}
+.inum:last-child{border-right:none;}
+.inum-v{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--tx);line-height:1;}
+.inum-l{font-size:9px;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;margin-top:1px;}
+.inum-v.ok{color:var(--grn);}
+.inum-v.warn{color:var(--amb);}
+.pbar{height:2px;background:var(--s3);border-radius:1px;margin-top:8px;overflow:hidden;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--orn),#f1c40f);border-radius:1px;transition:width .4s;}
+.empty{text-align:center;padding:40px 20px;color:var(--tx3);font-size:13px;}
 
-.icard { background:var(--s1); border:1px solid var(--bd); border-radius:var(--r12); margin-bottom:8px; overflow:hidden; cursor:pointer; transition:all .12s; display:flex; }
-.icard:active { transform:scale(.985); opacity:.85; }
-.icard.live { border-color:rgba(46,204,113,.4); }
-.icard-bar { width:4px; flex-shrink:0; background:var(--tx3); }
-.icard.live .icard-bar { background:var(--grn); }
-.icard-body { flex:1; padding:11px 12px; min-width:0; }
-.icard-top { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
-.icard-no { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:800; letter-spacing:.5px; color:var(--tx); line-height:1; }
-.badge { font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:2px 7px; border-radius:20px; }
-.b-live { background:rgba(46,204,113,.15); color:var(--grn); border:1px solid rgba(46,204,113,.3); }
-.b-cont { background:rgba(243,156,18,.15); color:var(--amb); border:1px solid rgba(243,156,18,.3); }
-.b-new  { background:rgba(52,152,219,.15); color:var(--blu); border:1px solid rgba(52,152,219,.3); }
-.icard-parca { font-size:12px; color:var(--tx2); margin-bottom:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.icard-nums { display:flex; gap:0; }
-.inum { flex:1; text-align:center; border-right:1px solid var(--bd); }
-.inum:last-child { border-right:none; }
-.inum-v { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; line-height:1; color:var(--tx); }
-.inum-l { font-size:9px; color:var(--tx3); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
-.inum-v.ok { color:var(--grn); }
-.inum-v.warn { color:var(--amb); }
-.pbar { height:2px; background:var(--s3); border-radius:1px; margin-top:9px; overflow:hidden; }
-.pfill { height:100%; background:linear-gradient(90deg,var(--orn),#f1c40f); border-radius:1px; transition:width .4s ease; }
+/* DETAY */
+.hero{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r12);padding:16px;margin-bottom:10px;}
+.hero-no{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;letter-spacing:1px;color:var(--tx);line-height:1;margin-bottom:2px;}
+.hero-parca{font-size:13px;color:var(--orn);margin-bottom:12px;}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.hf{background:var(--s2);border-radius:var(--r8);padding:8px 10px;}
+.hf-l{font-size:9px;color:var(--tx3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+.hf-v{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--tx);line-height:1;}
+.hf-v.ok{color:var(--grn);}
+.hf-v.warn{color:var(--amb);}
+.hf-v.danger{color:var(--red);}
 
-.empty { text-align:center; padding:48px 20px; color:var(--tx3); font-size:13px; }
+/* TIMER */
+.timer{background:var(--s1);border:1px solid rgba(46,204,113,.25);border-radius:var(--r12);padding:14px 16px;margin-bottom:10px;display:none;}
+.timer.on{display:block;}
+.timer-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.timer-led{width:8px;height:8px;border-radius:50%;background:var(--grn);animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.timer-lbl{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--grn);}
+.timer-val{font-family:'Barlow Condensed',sans-serif;font-size:52px;font-weight:900;letter-spacing:3px;color:var(--grn);line-height:1;}
+.timer-since{font-size:11px;color:var(--tx3);margin-top:2px;}
 
-/* ═══════════════════════════════════════
-   VIEW 3 — İŞ DETAY
-═══════════════════════════════════════ */
-.hero3 { background:var(--s1); border:1px solid var(--bd); border-radius:var(--r12); padding:16px; margin-bottom:12px; }
-.hero3-no { font-family:'Barlow Condensed',sans-serif; font-size:36px; font-weight:900; letter-spacing:1px; color:var(--tx); line-height:1; margin-bottom:2px; }
-.hero3-parca { font-size:13px; color:var(--orn); margin-bottom:12px; }
-.hero3-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:10px; }
-.hfield { background:var(--s2); border-radius:var(--r8); padding:8px 10px; }
-.hfield-l { font-size:9px; color:var(--tx3); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:3px; }
-.hfield-v { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; color:var(--tx); line-height:1; }
-.hfield-v.ok { color:var(--grn); }
-.hfield-v.warn { color:var(--amb); }
-.hfield-v.danger { color:var(--red); }
-.hero3 .pbar { margin-top:0; }
+/* TABS */
+.tabs{display:flex;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r12);padding:4px;gap:4px;margin-bottom:10px;}
+.tab{flex:1;padding:9px 6px;border-radius:var(--r8);border:none;background:none;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);cursor:pointer;transition:all .15s;}
+.tab.on{background:var(--s3);color:var(--tx);}
+.tpanel{display:none;}
+.tpanel.on{display:block;}
 
-/* Timer */
-.timer-box { background:var(--s1); border:1px solid rgba(46,204,113,.25); border-radius:var(--r12); padding:14px 16px; margin-bottom:12px; display:none; }
-.timer-box.on { display:block; }
-.timer-top { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-.timer-led { width:8px; height:8px; border-radius:50%; background:var(--grn); box-shadow:0 0 8px var(--grn); animation:blink 1.5s ease-in-out infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-.timer-lbl { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--grn); }
-.timer-val { font-family:'Barlow Condensed',sans-serif; font-size:52px; font-weight:900; letter-spacing:3px; color:var(--grn); line-height:1; }
-.timer-since { font-size:11px; color:var(--tx3); margin-top:2px; }
+/* NUMPAD */
+.npad{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r12);padding:14px;margin-bottom:10px;}
+.npad-lbl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:8px;}
+.npad-disp{font-family:'Barlow Condensed',sans-serif;font-size:54px;font-weight:900;letter-spacing:2px;color:var(--tx);text-align:center;padding:8px 0;line-height:1;}
+.npad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px;}
+.npad-btn{padding:15px 8px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r8);font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;color:var(--tx);cursor:pointer;text-align:center;transition:all .1s;}
+.npad-btn:active{transform:scale(.92);background:var(--s3);}
+.npad-btn.del{font-size:20px;color:var(--tx2);}
+.npad-btn.z2{grid-column:span 2;}
+.presets{display:flex;gap:6px;}
+.preset{flex:1;padding:10px 4px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r8);font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--tx2);cursor:pointer;text-align:center;transition:all .1s;}
+.preset:active{background:var(--s3);color:var(--tx);}
 
-/* Tabs */
-.tabs { display:flex; background:var(--s1); border:1px solid var(--bd); border-radius:var(--r12); padding:4px; gap:4px; margin-bottom:12px; }
-.tab { flex:1; padding:9px 6px; border-radius:var(--r8); border:none; background:none; font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--tx3); cursor:pointer; transition:all .15s; }
-.tab.on { background:var(--s3); color:var(--tx); }
+/* DURUŞ */
+.dkod-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;}
+.dkod{padding:11px 10px;background:var(--s1);border:1.5px solid var(--bd);border-radius:var(--r8);cursor:pointer;transition:all .12s;text-align:left;}
+.dkod:active{transform:scale(.95);}
+.dkod.on{border-color:var(--amb);background:rgba(243,156,18,.08);}
+.dkod-code{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:var(--amb);}
+.dkod-desc{font-size:11px;color:var(--tx3);margin-top:1px;}
 
-/* Tab panels */
-.tpanel { display:none; }
-.tpanel.on { display:block; }
+/* KALİTE */
+.sonuc-row{display:flex;gap:6px;margin-bottom:10px;}
+.sonuc-btn{flex:1;padding:13px 6px;border:1.5px solid var(--bd);border-radius:var(--r8);background:var(--s1);font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:1px;cursor:pointer;text-align:center;color:var(--tx3);transition:all .12s;}
+.sonuc-btn:active{transform:scale(.95);}
+.sonuc-btn.s-ok{border-color:var(--grn);background:rgba(46,204,113,.1);color:var(--grn);}
+.sonuc-btn.s-red{border-color:var(--red);background:rgba(231,76,60,.1);color:var(--red);}
+.sonuc-btn.s-amb{border-color:var(--amb);background:rgba(243,156,18,.1);color:var(--amb);}
 
-/* Numpad */
-.npad-wrap { background:var(--s1); border:1px solid var(--bd); border-radius:var(--r12); padding:14px; margin-bottom:12px; }
-.npad-lbl { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tx3); margin-bottom:10px; }
-.npad-display { font-family:'Barlow Condensed',sans-serif; font-size:54px; font-weight:900; letter-spacing:2px; color:var(--tx); text-align:center; padding:10px 0; line-height:1; }
-.npad-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:6px; }
-.npad-btn { padding:16px 8px; background:var(--s2); border:1px solid var(--bd); border-radius:var(--r8); font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700; color:var(--tx); cursor:pointer; transition:all .1s; text-align:center; }
-.npad-btn:active { transform:scale(.92); background:var(--s3); }
-.npad-btn.del { color:var(--tx2); font-size:22px; }
-.npad-btn.zero { grid-column:span 2; }
-.npad-presets { display:flex; gap:6px; }
-.preset { flex:1; padding:10px 6px; background:var(--s2); border:1px solid var(--bd); border-radius:var(--r8); font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; color:var(--tx2); cursor:pointer; text-align:center; transition:all .1s; }
-.preset:active { background:var(--s3); color:var(--tx); transform:scale(.94); }
+/* INPUTS */
+.inp{width:100%;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r8);padding:12px 14px;font-family:inherit;font-size:14px;color:var(--tx);outline:none;margin-bottom:10px;}
+.inp:focus{border-color:var(--bd2);}
+.inp::placeholder{color:var(--tx3);}
+textarea.inp{resize:none;}
 
-/* Action btns */
-.abtn { width:100%; padding:18px; border:none; border-radius:var(--r12); font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:800; letter-spacing:2px; text-transform:uppercase; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:all .12s; margin-bottom:8px; }
-.abtn:active { transform:scale(.97); }
-.abtn:disabled { opacity:.4; cursor:not-allowed; }
-.abtn-start { background:var(--grn2); color:#fff; }
-.abtn-start:active { background:#219a52; }
-.abtn-done  { background:var(--red2); color:#fff; }
-.abtn-done:active  { background:#a93226; }
-.abtn-vs    { background:var(--amb2); color:#fff; }
-.abtn-vs:active { background:#ca6f1e; }
-.abtn-row   { display:flex; gap:8px; }
-.abtn-row .abtn { flex:1; padding:14px 8px; font-size:20px; }
-.abtn-durus { background:var(--s2); border:1px solid var(--bd); color:var(--amb); }
-.abtn-kal   { background:var(--s2); border:1px solid var(--bd); color:var(--blu); }
-.spin-sm { width:20px; height:20px; border:3px solid rgba(255,255,255,.2); border-top-color:#fff; border-radius:50%; animation:sp .6s linear infinite; }
-@keyframes sp { to { transform:rotate(360deg); } }
+/* SPINNER */
+.spin{display:inline-block;width:20px;height:20px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg)}}
 
-/* Duruş list */
-.dkod-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:12px; }
-.dkod { padding:12px 10px; background:var(--s1); border:1.5px solid var(--bd); border-radius:var(--r8); cursor:pointer; transition:all .12s; text-align:left; }
-.dkod:active { transform:scale(.95); }
-.dkod.sel { border-color:var(--amb); background:rgba(243,156,18,.08); }
-.dkod-code { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:800; color:var(--amb); letter-spacing:.5px; }
-.dkod-desc { font-size:11px; color:var(--tx3); margin-top:2px; }
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--s2);border:1px solid var(--bd2);color:var(--tx);padding:11px 18px;border-radius:30px;font-size:13px;font-weight:600;opacity:0;transition:all .25s;z-index:9999;pointer-events:none;white-space:nowrap;max-width:88vw;text-align:center;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{background:rgba(46,204,113,.2);border-color:var(--grn);color:var(--grn);}
+.toast.err{background:rgba(231,76,60,.2);border-color:var(--red);color:var(--red);}
 
-/* Kalite sonuç */
-.sonuc-row { display:flex; gap:6px; margin-bottom:12px; }
-.sonuc-btn { flex:1; padding:14px 8px; border:1.5px solid var(--bd); border-radius:var(--r8); background:var(--s1); font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:800; letter-spacing:1px; cursor:pointer; transition:all .12s; text-align:center; color:var(--tx3); }
-.sonuc-btn:active { transform:scale(.95); }
-.sonuc-btn.sel-ok  { border-color:var(--grn); background:rgba(46,204,113,.1); color:var(--grn); }
-.sonuc-btn.sel-red { border-color:var(--red); background:rgba(231,76,60,.1); color:var(--red); }
-.sonuc-btn.sel-sar { border-color:var(--amb); background:rgba(243,156,18,.1); color:var(--amb); }
+/* SETUP SHEET */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s;}
+.overlay.on{opacity:1;pointer-events:all;}
+.sheet{width:100%;background:var(--s1);border-radius:16px 16px 0 0;border-top:1px solid var(--bd2);padding:20px 16px 36px;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);}
+.overlay.on .sheet{transform:translateY(0);}
+.sheet-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;color:var(--orn);letter-spacing:1px;margin-bottom:16px;}
+.sheet-lbl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:6px;}
+.sheet-inp{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r8);padding:13px 14px;font-size:14px;color:var(--tx);outline:none;margin-bottom:14px;font-family:inherit;}
+.sheet-inp:focus{border-color:var(--bd2);}
+.sheet-save{width:100%;padding:15px;background:var(--orn);border:none;border-radius:var(--r12);font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;letter-spacing:2px;color:#fff;cursor:pointer;}
 
-/* Note input */
-.note-inp { width:100%; background:var(--s1); border:1px solid var(--bd); border-radius:var(--r8); padding:12px 14px; font-size:14px; color:var(--tx); outline:none; resize:none; margin-bottom:12px; }
-.note-inp:focus { border-color:var(--bd2); }
-.note-inp::placeholder { color:var(--tx3); }
+/* BOTTOM NAV */
+.bnav{display:flex;border-top:1px solid var(--bd);background:var(--s1);flex-shrink:0;}
+.bnav-btn{flex:1;padding:10px 4px 8px;background:none;border:none;font-family:inherit;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);cursor:pointer;border-top:2px solid transparent;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all .15s;}
+.bnav-btn .ico{font-size:18px;}
+.bnav-btn.on{color:var(--orn);border-top-color:var(--orn);}
 
-/* ── LOGIN ── */
-.login-wrap { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100%; padding:24px 20px; }
-.login-logo { font-family:'Barlow Condensed',sans-serif; font-size:72px; font-weight:900; color:var(--orn); letter-spacing:4px; line-height:1; margin-bottom:4px; }
-.login-sub { font-size:11px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--tx3); margin-bottom:36px; }
-.login-card { width:100%; max-width:340px; }
-.login-inp-wrap { background:var(--s1); border:1px solid var(--bd); border-radius:var(--r12); padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
-.login-inp-wrap:focus-within { border-color:var(--bd2); }
-.login-inp-icon { font-size:18px; flex-shrink:0; }
-.login-inp { flex:1; background:none; border:none; color:var(--tx); font-size:16px; font-weight:600; outline:none; }
-.login-inp::placeholder { color:var(--tx3); }
-.pin-display { display:flex; gap:10px; justify-content:center; margin:18px 0 16px; }
-.pin-dot { width:18px; height:18px; border-radius:50%; border:2px solid var(--bd2); transition:all .15s; }
-.pin-dot.filled { background:var(--orn); border-color:var(--orn); }
-.pin-dot.err { background:var(--red); border-color:var(--red); }
-.pin-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
-.pin-btn { padding:18px 8px; background:var(--s1); border:1px solid var(--bd); border-radius:var(--r12); font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:800; color:var(--tx); cursor:pointer; transition:all .1s; text-align:center; }
-.pin-btn:active { transform:scale(.9); background:var(--s2); }
-.pin-btn.del { font-size:22px; color:var(--tx2); }
-.pin-btn.zero { grid-column:span 2; }
-.pin-btn.gir { background:var(--orn); color:#fff; border-color:var(--orn); }
-.pin-btn.gir:active { background:var(--amb2); }
-.login-err { text-align:center; color:var(--red); font-size:13px; font-weight:600; min-height:20px; margin-bottom:8px; }
-.sheet-bg { position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:500; opacity:0; pointer-events:none; transition:opacity .2s; }
-.sheet-bg.on { opacity:1; pointer-events:all; }
-.sheet { position:absolute; bottom:0; left:0; right:0; background:var(--s1); border-radius:var(--r16) var(--r16) 0 0; padding:20px 16px calc(24px + var(--safe-b)); transform:translateY(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); border-top:1px solid var(--bd2); }
-.sheet-bg.on .sheet { transform:translateY(0); }
-.sheet-title { font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:800; color:var(--orn); letter-spacing:1px; margin-bottom:16px; }
-.sheet-lbl { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tx3); margin-bottom:6px; }
-.sheet-inp { width:100%; background:var(--s2); border:1px solid var(--bd); border-radius:var(--r8); padding:13px 14px; font-size:14px; color:var(--tx); outline:none; margin-bottom:14px; }
-.sheet-inp:focus { border-color:var(--bd2); }
-.save-btn { width:100%; padding:16px; background:var(--orn); border:none; border-radius:var(--r12); font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:800; letter-spacing:2px; color:#fff; cursor:pointer; }
+/* WELCOME ROW */
+.welcome-row{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r12);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.welcome-name{font-size:15px;font-weight:600;}
+.logout-btn{background:none;border:1px solid rgba(231,76,60,.3);border-radius:var(--r8);padding:6px 12px;color:var(--red);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;}
 
-/* ── TOAST ── */
-.toast { position:fixed; bottom:calc(20px + var(--safe-b)); left:50%; transform:translateX(-50%) translateY(12px); background:var(--s2); border:1px solid var(--bd2); color:var(--tx); padding:11px 18px; border-radius:30px; font-size:13px; font-weight:600; opacity:0; transition:all .25s; z-index:999; pointer-events:none; white-space:nowrap; max-width:88vw; text-align:center; }
-.toast.on { opacity:1; transform:translateX(-50%) translateY(0); }
-.toast.ok { background:rgba(46,204,113,.2); border-color:var(--grn); color:var(--grn); }
-.toast.err { background:rgba(231,76,60,.2); border-color:var(--red); color:var(--red); }
+/* MANUEL GİRİŞ */
+.manuel-row{display:flex;gap:8px;margin-bottom:12px;}
+.manuel-row input{flex:1;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r8);padding:11px 14px;font-size:14px;color:var(--tx);outline:none;font-family:inherit;}
+.manuel-row input:focus{border-color:var(--bd2);}
+.manuel-row input::placeholder{color:var(--tx3);}
+.manuel-row button{background:var(--grn2);border:none;border-radius:var(--r8);padding:11px 16px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;cursor:pointer;white-space:nowrap;}
+.manuel-row button:active{opacity:.8;}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════
-     V0 — GİRİŞ
-══════════════════════════════════ -->
-<div class="view on" id="v0">
-  <div class="sbar">
-    <div class="sbar-logo">APS</div>
-    <div class="sbar-div"></div>
-    <div class="sbar-info">
-      <div class="sbar-title">Operatör Girişi</div>
-      <div class="sbar-sub" id="v0date">—</div>
+<!-- ════════════════════════════════
+  EKRAN 0 — GİRİŞ
+════════════════════════════════ -->
+<div class="view active" id="v0">
+  <div class="top">
+    <div class="logo">APS</div>
+    <div class="vdiv"></div>
+    <div class="top-info">
+      <div class="top-lbl">Üretim Takip Sistemi</div>
+      <div class="top-sub" id="v0date">—</div>
     </div>
-    <div class="sbar-time" id="v0clock">—</div>
-    <div class="gear-btn" onclick="openSheet()" title="Ayarlar">⚙</div>
+    <div class="top-time" id="v0clk">—</div>
+    <div class="icon-btn" onclick="openSetup()">⚙</div>
   </div>
-  <div class="scrl">
-    <div class="login-wrap">
+  <div class="scrl" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <div class="login-wrap" style="padding:0;">
       <div class="login-logo">APS</div>
-      <div class="login-sub">Üretim Takip Sistemi</div>
-      <div class="login-card">
-        <div class="login-inp-wrap">
-          <div class="login-inp-icon">👤</div>
-          <input class="login-inp" id="loginUser" type="text" placeholder="Kullanıcı adı" autocomplete="off" autocapitalize="none" spellcheck="false">
+      <div class="login-tagline">Operatör Girişi</div>
+      <div class="login-box">
+        <div class="login-user">
+          <span style="font-size:18px;">👤</span>
+          <input id="inp_user" type="text" placeholder="Kullanıcı adı" autocomplete="off" autocapitalize="none" spellcheck="false" onkeydown="if(event.key==='Enter')document.getElementById('inp_user').blur()">
         </div>
-        <div class="pin-display" id="pinDots">
+        <div class="pin-dots" id="pin_dots">
           <div class="pin-dot" id="pd0"></div>
           <div class="pin-dot" id="pd1"></div>
           <div class="pin-dot" id="pd2"></div>
           <div class="pin-dot" id="pd3"></div>
         </div>
-        <div class="login-err" id="loginErr"></div>
-        <div class="pin-grid">
-          <div class="pin-btn" onclick="pinKey(1)">1</div>
-          <div class="pin-btn" onclick="pinKey(2)">2</div>
-          <div class="pin-btn" onclick="pinKey(3)">3</div>
-          <div class="pin-btn" onclick="pinKey(4)">4</div>
-          <div class="pin-btn" onclick="pinKey(5)">5</div>
-          <div class="pin-btn" onclick="pinKey(6)">6</div>
-          <div class="pin-btn" onclick="pinKey(7)">7</div>
-          <div class="pin-btn" onclick="pinKey(8)">8</div>
-          <div class="pin-btn" onclick="pinKey(9)">9</div>
-          <div class="pin-btn zero" onclick="pinKey(0)">0</div>
-          <div class="pin-btn del" onclick="pinDel()">⌫</div>
+        <div class="login-err" id="login_err"></div>
+        <div class="pad">
+          <div class="pad-btn" onclick="pinKey(1)">1</div>
+          <div class="pad-btn" onclick="pinKey(2)">2</div>
+          <div class="pad-btn" onclick="pinKey(3)">3</div>
+          <div class="pad-btn" onclick="pinKey(4)">4</div>
+          <div class="pad-btn" onclick="pinKey(5)">5</div>
+          <div class="pad-btn" onclick="pinKey(6)">6</div>
+          <div class="pad-btn" onclick="pinKey(7)">7</div>
+          <div class="pad-btn" onclick="pinKey(8)">8</div>
+          <div class="pad-btn" onclick="pinKey(9)">9</div>
+          <div class="pad-btn z2" onclick="pinKey(0)">0</div>
+          <div class="pad-btn del" onclick="pinDel()">⌫</div>
         </div>
-        <button class="abtn abtn-start" id="btnLogin" onclick="doLogin()" style="font-size:22px">GİRİŞ YAP</button>
+        <button class="btn btn-grn" id="btn_login" onclick="doLogin()" style="margin-bottom:0">GİRİŞ YAP</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     V1 — TEZGAH SEÇ
-══════════════════════════════════ -->
-<div class="view slide-in" id="v1">
-  <div class="sbar">
-    <div class="sbar-logo">APS</div>
-    <div class="sbar-div"></div>
-    <div class="sbar-info">
-      <div class="sbar-title">Operatör Girişi</div>
-      <div class="sbar-sub" id="v1date">—</div>
+<!-- ════════════════════════════════
+  EKRAN 1 — TEZGAH SEÇ
+════════════════════════════════ -->
+<div class="view slide" id="v1">
+  <div class="top">
+    <div class="logo">APS</div>
+    <div class="vdiv"></div>
+    <div class="top-info">
+      <div class="top-lbl">Tezgah Seçin</div>
+      <div class="top-sub" id="v1date">—</div>
     </div>
-    <div class="sbar-time" id="v1clock">—</div>
-    <div class="gear-btn" onclick="openSheet()">⚙</div>
+    <div class="top-time" id="v1clk">—</div>
+    <div class="icon-btn" onclick="openSetup()">⚙</div>
   </div>
   <div class="scrl">
-    <div class="personel-row" id="welcomeRow" style="justify-content:space-between">
-      <div style="display:flex;align-items:center;gap:8px">
-        <div class="personel-icon">👤</div>
-        <div>
-          <div style="font-size:12px;color:var(--tx3);letter-spacing:1px">HOŞ GELDİNİZ</div>
-          <div style="font-size:15px;font-weight:700" id="welcomeName">—</div>
-        </div>
+    <div class="welcome-row">
+      <div>
+        <div style="font-size:11px;color:var(--tx3);letter-spacing:1px;margin-bottom:2px;">HOŞ GELDİNİZ</div>
+        <div class="welcome-name" id="v1_name">—</div>
       </div>
-      <div class="back-btn" onclick="logout()" title="Çıkış" style="font-size:13px;font-weight:700;color:var(--red)">ÇIKIŞ</div>
+      <button class="logout-btn" onclick="doLogout()">ÇIKIŞ</button>
     </div>
-    <div class="sec-lbl">Tezgah</div>
+    <div class="sec-lbl">Tezgahınızı seçin</div>
     <div class="tgrid" id="tgrid"></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     V2 — İŞ LİSTESİ
-══════════════════════════════════ -->
-<div class="view slide-in" id="v2">
-  <div class="sbar">
-    <div class="back-btn" onclick="geri('v1')">←</div>
-    <div class="sbar-div"></div>
-    <div class="sbar-info">
-      <div class="sbar-title">İş Emirleri</div>
-      <div class="sbar-sub" id="v2mach">—</div>
+<!-- ════════════════════════════════
+  EKRAN 2 — İŞ LİSTESİ
+════════════════════════════════ -->
+<div class="view slide" id="v2">
+  <div class="top">
+    <div class="icon-btn" onclick="goBack('v1')">←</div>
+    <div class="vdiv"></div>
+    <div class="top-info">
+      <div class="top-lbl">İş Emirleri</div>
+      <div class="top-sub" id="v2_mach">—</div>
     </div>
-    <div class="sbar-time" id="v2clock">—</div>
+    <div class="top-time" id="v2clk">—</div>
   </div>
-  <div class="scrl" id="v2scrl">
-    <!-- Manuel iş emri girişi — her zaman görünür -->
-    <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r12);padding:14px;margin-bottom:12px;">
-      <div class="sec-lbl" style="margin-bottom:8px">Manuel İş Emri Başlat</div>
-      <div style="display:flex;gap:8px;">
-        <input class="srch" id="manuelIsEmri" placeholder="İş emri no girin..." style="margin-bottom:0;flex:1" autocapitalize="characters" autocomplete="off">
-        <button onclick="manuelBasla()" style="background:var(--grn2);border:none;border-radius:var(--r8);padding:10px 16px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;cursor:pointer;white-space:nowrap;flex-shrink:0;">▶ BAŞLAT</button>
-      </div>
+  <div class="scrl">
+    <div class="manuel-row">
+      <input id="inp_manuel" type="text" placeholder="İş emri yazın..." autocapitalize="characters" autocomplete="off">
+      <button onclick="manuelBasla()">▶ BAŞLAT</button>
     </div>
-    <div id="v2content"><div class="empty">Yükleniyor...</div></div>
+    <div id="v2_content"><div class="empty">Yükleniyor...</div></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     V3 — DETAY & EYLEM
-══════════════════════════════════ -->
-<div class="view slide-in" id="v3">
-  <div class="sbar">
-    <div class="back-btn" onclick="geri('v2')">←</div>
-    <div class="sbar-div"></div>
-    <div class="sbar-info">
-      <div class="sbar-title" id="v3mach">—</div>
-      <div class="sbar-sub" id="v3isno">—</div>
+<!-- ════════════════════════════════
+  EKRAN 3 — İŞ DETAY
+════════════════════════════════ -->
+<div class="view slide" id="v3">
+  <div class="top">
+    <div class="icon-btn" onclick="goBack('v2')">←</div>
+    <div class="vdiv"></div>
+    <div class="top-info">
+      <div class="top-lbl" id="v3_mach">—</div>
+      <div class="top-sub" id="v3_isno">—</div>
     </div>
-    <div class="sbar-time" id="v3clock">—</div>
+    <div class="top-time" id="v3clk">—</div>
   </div>
   <div class="scrl" id="v3scrl">
-
     <!-- Hero -->
-    <div class="hero3">
-      <div class="hero3-no" id="d_no">—</div>
-      <div class="hero3-parca" id="d_parca">—</div>
-      <div class="hero3-grid">
-        <div class="hfield"><div class="hfield-l">Plan</div><div class="hfield-v" id="d_plan">—</div></div>
-        <div class="hfield"><div class="hfield-l">Üretilen</div><div class="hfield-v ok" id="d_uret">—</div></div>
-        <div class="hfield"><div class="hfield-l">Kalan</div><div class="hfield-v warn" id="d_kal">—</div></div>
-        <div class="hfield" style="grid-column:span 2"><div class="hfield-l">Termin</div><div class="hfield-v" id="d_term">—</div></div>
-        <div class="hfield"><div class="hfield-l">Durum</div><div class="hfield-v" id="d_dur">—</div></div>
+    <div class="hero">
+      <div class="hero-no" id="d_no">—</div>
+      <div class="hero-parca" id="d_parca">—</div>
+      <div class="hero-grid">
+        <div class="hf"><div class="hf-l">Plan</div><div class="hf-v" id="d_plan">—</div></div>
+        <div class="hf"><div class="hf-l">Üretilen</div><div class="hf-v ok" id="d_uret">—</div></div>
+        <div class="hf"><div class="hf-l">Kalan</div><div class="hf-v warn" id="d_kal">—</div></div>
+        <div class="hf" style="grid-column:span 2"><div class="hf-l">Termin</div><div class="hf-v" id="d_term">—</div></div>
+        <div class="hf"><div class="hf-l">Durum</div><div class="hf-v" id="d_dur">—</div></div>
       </div>
       <div class="pbar"><div class="pfill" id="d_pfill" style="width:0%"></div></div>
     </div>
 
     <!-- Timer -->
-    <div class="timer-box" id="timerBox">
-      <div class="timer-top">
-        <div class="timer-led"></div>
-        <div class="timer-lbl">Aktif — Çalışıyor</div>
-      </div>
+    <div class="timer" id="timerBox">
+      <div class="timer-top"><div class="timer-led"></div><div class="timer-lbl">Aktif — Çalışıyor</div></div>
       <div class="timer-val" id="timerVal">00:00:00</div>
       <div class="timer-since" id="timerSince"></div>
     </div>
 
     <!-- Tabs -->
     <div class="tabs">
-      <button class="tab on" id="tab-uret" onclick="goTab('uret')">⚙ Üretim</button>
-      <button class="tab" id="tab-durus" onclick="goTab('durus')">⏸ Duruş</button>
-      <button class="tab" id="tab-kal" onclick="goTab('kal')">✓ Kalite</button>
+      <button class="tab on" id="tab_uret" onclick="goTab('uret')">⚙ Üretim</button>
+      <button class="tab" id="tab_durus" onclick="goTab('durus')">⏸ Duruş</button>
+      <button class="tab" id="tab_kal" onclick="goTab('kal')">✓ Kalite</button>
     </div>
 
-    <!-- ── ÜRETİM PANELİ ── -->
-    <div class="tpanel on" id="panel-uret">
-
-      <!-- BAŞLAT (iş yokken) -->
-      <div id="blk-basla">
-        <button class="abtn abtn-start" id="btnBasla" onclick="basla()">▶ BAŞLAT</button>
+    <!-- ÜRETİM -->
+    <div class="tpanel on" id="panel_uret">
+      <div id="blk_basla">
+        <button class="btn btn-grn" id="btn_basla" onclick="doBasla()">▶ BAŞLAT</button>
       </div>
-
-      <!-- BİTİR (iş aktifken) -->
-      <div id="blk-bitir" style="display:none">
-        <div class="npad-wrap">
+      <div id="blk_bitir" style="display:none">
+        <div class="npad">
           <div class="npad-lbl">Üretilen Adet</div>
-          <div class="npad-display" id="np_uret">0</div>
+          <div class="npad-disp" id="np_u">0</div>
           <div class="npad-grid">
-            <div class="npad-btn" onclick="npad('u',7)">7</div>
-            <div class="npad-btn" onclick="npad('u',8)">8</div>
-            <div class="npad-btn" onclick="npad('u',9)">9</div>
-            <div class="npad-btn" onclick="npad('u',4)">4</div>
-            <div class="npad-btn" onclick="npad('u',5)">5</div>
-            <div class="npad-btn" onclick="npad('u',6)">6</div>
-            <div class="npad-btn" onclick="npad('u',1)">1</div>
-            <div class="npad-btn" onclick="npad('u',2)">2</div>
-            <div class="npad-btn" onclick="npad('u',3)">3</div>
-            <div class="npad-btn zero" onclick="npad('u',0)">0</div>
-            <div class="npad-btn del" onclick="npadDel('u')">⌫</div>
+            <div class="npad-btn" onclick="nk('u',7)">7</div><div class="npad-btn" onclick="nk('u',8)">8</div><div class="npad-btn" onclick="nk('u',9)">9</div>
+            <div class="npad-btn" onclick="nk('u',4)">4</div><div class="npad-btn" onclick="nk('u',5)">5</div><div class="npad-btn" onclick="nk('u',6)">6</div>
+            <div class="npad-btn" onclick="nk('u',1)">1</div><div class="npad-btn" onclick="nk('u',2)">2</div><div class="npad-btn" onclick="nk('u',3)">3</div>
+            <div class="npad-btn z2" onclick="nk('u',0)">0</div><div class="npad-btn del" onclick="nd('u')">⌫</div>
           </div>
-          <div class="npad-presets">
-            <div class="preset" onclick="npadSet('u',1)">+1</div>
-            <div class="preset" onclick="npadSet('u',5)">+5</div>
-            <div class="preset" onclick="npadSet('u',10)">+10</div>
-            <div class="preset" onclick="npadSet('u',25)">+25</div>
-            <div class="preset" onclick="npadKalan()">Kalan</div>
+          <div class="presets">
+            <div class="preset" onclick="np('u',1)">+1</div>
+            <div class="preset" onclick="np('u',5)">+5</div>
+            <div class="preset" onclick="np('u',10)">+10</div>
+            <div class="preset" onclick="np('u',25)">+25</div>
+            <div class="preset" onclick="npKalan()">Kalan</div>
           </div>
         </div>
-        <button class="abtn abtn-done" id="btnBitir" onclick="bitir()">⏹ İŞ TAMAM</button>
-        <button class="abtn abtn-vs"   id="btnVS"    onclick="vardiyaSonu()">🌙 VARDİYA SONU</button>
+        <div class="npad">
+          <div class="npad-lbl">Hatalı / Fire Adet</div>
+          <div class="npad-disp" id="np_h">0</div>
+          <div class="npad-grid">
+            <div class="npad-btn" onclick="nk('h',7)">7</div><div class="npad-btn" onclick="nk('h',8)">8</div><div class="npad-btn" onclick="nk('h',9)">9</div>
+            <div class="npad-btn" onclick="nk('h',4)">4</div><div class="npad-btn" onclick="nk('h',5)">5</div><div class="npad-btn" onclick="nk('h',6)">6</div>
+            <div class="npad-btn" onclick="nk('h',1)">1</div><div class="npad-btn" onclick="nk('h',2)">2</div><div class="npad-btn" onclick="nk('h',3)">3</div>
+            <div class="npad-btn z2" onclick="nk('h',0)">0</div><div class="npad-btn del" onclick="nd('h')">⌫</div>
+          </div>
+        </div>
+        <button class="btn btn-red" id="btn_bitir" onclick="doBitir()">⏹ İŞ TAMAM</button>
+        <button class="btn btn-amb" id="btn_vs" onclick="doVardiya()">🌙 VARDİYA SONU</button>
       </div>
-
     </div>
 
-    <!-- ── DURUŞ PANELİ ── -->
-    <div class="tpanel" id="panel-durus">
-      <div class="sec-lbl" style="margin-bottom:8px">Duruş Kodu Seç</div>
-      <div class="dkod-grid" id="dkodGrid"></div>
-      <textarea class="note-inp" id="d_not" rows="2" placeholder="Açıklama (opsiyonel)..."></textarea>
-      <button class="abtn abtn-durus" id="btnDurus" onclick="kaydetDurus()">⏸ DURUŞ KAYDET</button>
+    <!-- DURUŞ -->
+    <div class="tpanel" id="panel_durus">
+      <div class="sec-lbl">Duruş Kodu</div>
+      <div class="dkod-grid" id="dkod_grid"></div>
+      <textarea class="inp" id="d_acik" rows="2" placeholder="Açıklama (opsiyonel)..."></textarea>
+      <button class="btn btn-ghost" style="color:var(--amb)" id="btn_durus" onclick="doDurus()">⏸ DURUŞ KAYDET</button>
     </div>
 
-    <!-- ── KALİTE PANELİ ── -->
-    <div class="tpanel" id="panel-kal">
-      <div class="sec-lbl" style="margin-bottom:6px">Kontrol Tipi</div>
-      <div class="sonuc-row" style="margin-bottom:12px">
-        <button class="sonuc-btn" id="ktyp-kal" onclick="setKTip('KALİTE',this)">Manuel</button>
-        <button class="sonuc-btn" id="ktyp-cmm" onclick="setKTip('CMM',this)">CMM</button>
-        <button class="sonuc-btn" id="ktyp-olc" onclick="setKTip('ÖLÇÜM',this)">Ölçüm</button>
+    <!-- KALİTE -->
+    <div class="tpanel" id="panel_kal">
+      <div class="sec-lbl">Kontrol Tipi</div>
+      <div class="sonuc-row" id="ktip_row">
+        <button class="sonuc-btn s-ok" onclick="setKTip('KALİTE (ÖLÇÜM)',this)">Manuel</button>
+        <button class="sonuc-btn" onclick="setKTip('CMM',this)">CMM</button>
+        <button class="sonuc-btn" onclick="setKTip('ÖLÇÜM',this)">Ölçüm</button>
       </div>
-      <div class="npad-wrap" style="margin-bottom:10px">
+      <div class="npad">
         <div class="npad-lbl">Ölçülen Adet</div>
-        <div class="npad-display" id="np_olc">0</div>
+        <div class="npad-disp" id="np_o">0</div>
         <div class="npad-grid">
-          <div class="npad-btn" onclick="npad('o',7)">7</div><div class="npad-btn" onclick="npad('o',8)">8</div><div class="npad-btn" onclick="npad('o',9)">9</div>
-          <div class="npad-btn" onclick="npad('o',4)">4</div><div class="npad-btn" onclick="npad('o',5)">5</div><div class="npad-btn" onclick="npad('o',6)">6</div>
-          <div class="npad-btn" onclick="npad('o',1)">1</div><div class="npad-btn" onclick="npad('o',2)">2</div><div class="npad-btn" onclick="npad('o',3)">3</div>
-          <div class="npad-btn zero" onclick="npad('o',0)">0</div><div class="npad-btn del" onclick="npadDel('o')">⌫</div>
+          <div class="npad-btn" onclick="nk('o',7)">7</div><div class="npad-btn" onclick="nk('o',8)">8</div><div class="npad-btn" onclick="nk('o',9)">9</div>
+          <div class="npad-btn" onclick="nk('o',4)">4</div><div class="npad-btn" onclick="nk('o',5)">5</div><div class="npad-btn" onclick="nk('o',6)">6</div>
+          <div class="npad-btn" onclick="nk('o',1)">1</div><div class="npad-btn" onclick="nk('o',2)">2</div><div class="npad-btn" onclick="nk('o',3)">3</div>
+          <div class="npad-btn z2" onclick="nk('o',0)">0</div><div class="npad-btn del" onclick="nd('o')">⌫</div>
         </div>
       </div>
-      <div class="npad-wrap" style="margin-bottom:10px">
+      <div class="npad">
         <div class="npad-lbl">Reddedilen Adet</div>
-        <div class="npad-display" id="np_red">0</div>
+        <div class="npad-disp" id="np_r">0</div>
         <div class="npad-grid">
-          <div class="npad-btn" onclick="npad('r',7)">7</div><div class="npad-btn" onclick="npad('r',8)">8</div><div class="npad-btn" onclick="npad('r',9)">9</div>
-          <div class="npad-btn" onclick="npad('r',4)">4</div><div class="npad-btn" onclick="npad('r',5)">5</div><div class="npad-btn" onclick="npad('r',6)">6</div>
-          <div class="npad-btn" onclick="npad('r',1)">1</div><div class="npad-btn" onclick="npad('r',2)">2</div><div class="npad-btn" onclick="npad('r',3)">3</div>
-          <div class="npad-btn zero" onclick="npad('r',0)">0</div><div class="npad-btn del" onclick="npadDel('r')">⌫</div>
+          <div class="npad-btn" onclick="nk('r',7)">7</div><div class="npad-btn" onclick="nk('r',8)">8</div><div class="npad-btn" onclick="nk('r',9)">9</div>
+          <div class="npad-btn" onclick="nk('r',4)">4</div><div class="npad-btn" onclick="nk('r',5)">5</div><div class="npad-btn" onclick="nk('r',6)">6</div>
+          <div class="npad-btn" onclick="nk('r',1)">1</div><div class="npad-btn" onclick="nk('r',2)">2</div><div class="npad-btn" onclick="nk('r',3)">3</div>
+          <div class="npad-btn z2" onclick="nk('r',0)">0</div><div class="npad-btn del" onclick="nd('r')">⌫</div>
         </div>
       </div>
-      <div class="sec-lbl" style="margin-bottom:6px">Sonuç</div>
-      <div class="sonuc-row">
-        <button class="sonuc-btn sel-ok"  id="ks-onay" onclick="setKSonuc('ONAY',this)">✓ Onay</button>
-        <button class="sonuc-btn"          id="ks-red"  onclick="setKSonuc('RED',this)">✗ Red</button>
-        <button class="sonuc-btn"          id="ks-sar"  onclick="setKSonuc('ŞARTLI',this)">⚠ Şartlı</button>
+      <div class="sec-lbl">Sonuç</div>
+      <div class="sonuc-row" id="ksonuc_row">
+        <button class="sonuc-btn s-ok" onclick="setKSonuc('ONAY',this)">✓ Onay</button>
+        <button class="sonuc-btn" onclick="setKSonuc('RED',this)">✗ Red</button>
+        <button class="sonuc-btn" onclick="setKSonuc('ŞARTLI',this)">⚠ Şartlı</button>
       </div>
-      <textarea class="note-inp" id="k_not" rows="2" placeholder="Ölçüm değerleri, açıklama..."></textarea>
-      <button class="abtn abtn-kal" id="btnKal" onclick="kaydetKal()">✓ KALİTE KAYDET</button>
+      <textarea class="inp" id="k_acik" rows="2" placeholder="Açıklama..."></textarea>
+      <button class="btn btn-blue" id="btn_kal" onclick="doKalite()">✓ KALİTE KAYDET</button>
     </div>
-
+  </div>
+  <div class="bnav">
+    <button class="bnav-btn on" id="bnav_uret" onclick="goTab('uret')"><span class="ico">⚙</span>Üretim</button>
+    <button class="bnav-btn" id="bnav_durus" onclick="goTab('durus')"><span class="ico">⏸</span>Duruş</button>
+    <button class="bnav-btn" id="bnav_kal" onclick="goTab('kal')"><span class="ico">✓</span>Kalite</button>
   </div>
 </div>
 
-<!-- SETUP SHEET -->
-<div class="sheet-bg" id="sheetBg" onclick="closeSheet(event)">
+<!-- SETUP -->
+<div class="overlay" id="setupOverlay" onclick="if(event.target===this)closeSetup()">
   <div class="sheet">
     <div class="sheet-title">AYARLAR</div>
     <div class="sheet-lbl">Google Apps Script URL</div>
-    <input class="sheet-inp" id="cfg_url" type="url" placeholder="https://script.google.com/macros/s/.../exec">
-    <div class="sheet-lbl">Tezgah Listesi (virgülle, opsiyonel)</div>
-    <input class="sheet-inp" id="cfg_tez" type="text" placeholder="Boş bırakırsanız varsayılan liste kullanılır">
-    <button class="save-btn" onclick="saveSheet()">KAYDET</button>
+    <input class="sheet-inp" id="setup_url" type="url" placeholder="https://script.google.com/macros/s/.../exec">
+    <div class="sheet-lbl">Tezgah Listesi (virgülle — boşsa varsayılan kullanılır)</div>
+    <input class="sheet-inp" id="setup_tez" type="text" placeholder="A5-1,AT-3,...">
+    <button class="sheet-save" onclick="saveSetup()">KAYDET</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const TEZGAHLAR_DEF = ["AF-1","AF-2","AF-3","AF-4","AF-5","AT-1","AT-2","AT-3","AT-4","AT-5","A5-1","A5-2","A5-3","A5-4","Tesviye","CMM","MANUEL KONTROL"];
-const DURUSLAR = [{k:"D01",d:"Makine Arıza"},{k:"D03",d:"Takım Değiştirme"},{k:"D04",d:"Ayar/Setup"},{k:"D05",d:"Malzeme Bekleme"},{k:"D06",d:"Parça Bekleme"},{k:"D07",d:"CMM Bekleme"},{k:"D08",d:"İş Yok"},{k:"D09",d:"Bakım"},{k:"D10",d:"Yemek/Mola"}];
+// ══════════════════════════════════════════════
+// SABİTLER
+// ══════════════════════════════════════════════
+const DEFAULT_URL = "https://script.google.com/macros/s/AKfycbxFBE_-swxvmyAtXmjBaZvkovMIdg6zrDlHqWCWbuNOkn1zpcRjam480lzDYn3AuK0l/exec";
 
-let CFG   = { url: "https://script.google.com/macros/s/AKfycbxFBE_-swxvmyAtXmjBaZvkovMIdg6zrDlHqWCWbuNOkn1zpcRjam480lzDYn3AuK0l/exec", tezgahlar:[] };
-let USER  = null;
-let SEL   = { tezgah:"", personel:"", isEmri:"", isData:null };
-let AKTIF = null;
-let IS_LIST = [];
-let NVALS = { u:"0", o:"0", r:"0" };
-let K_TIP = "KALİTE", K_SONUC = "ONAY", SEL_DURUS = "D01";
+const TEZGAH_DEF = [
+  "AF-1 (3 Eksen)","AF-2 (3 Eksen)","AF-3 (3 Eksen)","AF-4 (3 Eksen)","AF-5 (3 Eksen)",
+  "AT-1 (Torna)","AT-2 (Torna)","AT-3 (Torna)","AT-4 (Torna)","AT-5 (Torna)",
+  "A5-1 (5 Eksen)","A5-2 (5 Eksen)","A5-3 (5 Eksen)","A5-4 (5 Eksen)",
+  "Tesviye","CMM (Kalite)","MANUEL KONTROL (KALİTE)"
+];
+
+const DURUSLAR = [
+  {k:"D01",d:"Makine Arıza"},{k:"D03",d:"Takım Değiştirme"},{k:"D04",d:"Ayar/Setup"},
+  {k:"D05",d:"Malzeme Bekleme"},{k:"D06",d:"Parça Bekleme"},{k:"D07",d:"CMM Bekleme"},
+  {k:"D08",d:"İş Yok"},{k:"D09",d:"Bakım"},{k:"D10",d:"Yemek/Mola"}
+];
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let CFG    = { url: DEFAULT_URL, tezgahlar: [] };
+let USER   = null;
+let AKTIF  = null;
+let SEL    = { tezgah: "", personel: "", isEmri: "", isData: null };
+let ISLER  = [];
+let NV     = { u:"0", h:"0", o:"0", r:"0" };
+let PIN    = "";
+let K_TIP  = "KALİTE (ÖLÇÜM)";
+let K_SON  = "ONAY";
+let D_KOD  = "D01";
 let timerIv = null;
-let PIN_BUF = "";
 
-// ── INIT ──────────────────────────────
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
 (function(){
-  try { CFG  = {...CFG,...JSON.parse(localStorage.getItem("aps_cfg")||"{}")}; } catch(e){}
-  try { AKTIF= JSON.parse(localStorage.getItem("aps_aktif")||"null"); } catch(e){}
-  try { USER = JSON.parse(localStorage.getItem("aps_user")||"null"); } catch(e){}
+  try { const c = JSON.parse(localStorage.getItem("aps_cfg")||"{}"); CFG = {...CFG,...c}; } catch(e){}
+  try { AKTIF = JSON.parse(localStorage.getItem("aps_aktif")||"null"); } catch(e){}
+  try { USER  = JSON.parse(localStorage.getItem("aps_user")||"null"); } catch(e){}
+
+  document.getElementById("setup_url").value = CFG.url || "";
+  document.getElementById("setup_tez").value = (CFG.tezgahlar||[]).join(",");
+
   buildDuruslar();
   startClock();
-  document.getElementById("cfg_url").value = CFG.url||"";
-  document.getElementById("cfg_tez").value = (CFG.tezgahlar||[]).join(",");
-  if(USER){ enterApp(); } else { goView("v0"); }
+
+  if (USER) {
+    enterApp();
+  } else {
+    showView("v0");
+  }
 })();
 
-// ── PIN ───────────────────────────────
-function pinKey(d){
-  if(PIN_BUF.length>=4) return;
-  PIN_BUF+=String(d); updatePinDots();
-  if(PIN_BUF.length===4) setTimeout(doLogin,120);
+// ══════════════════════════════════════════════
+// SAAT
+// ══════════════════════════════════════════════
+function startClock() {
+  const upd = () => {
+    const n = new Date();
+    const t = n.toLocaleTimeString("tr-TR", {hour:"2-digit",minute:"2-digit"});
+    const d = n.toLocaleDateString("tr-TR", {weekday:"short",day:"numeric",month:"short"});
+    ["v0clk","v1clk","v2clk","v3clk"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = t;
+    });
+    ["v0date","v1date"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = d;
+    });
+  };
+  upd();
+  setInterval(upd, 5000);
 }
-function pinDel(){
-  PIN_BUF=PIN_BUF.slice(0,-1); updatePinDots();
-  document.getElementById("loginErr").textContent="";
+
+// ══════════════════════════════════════════════
+// NAVİGASYON
+// ══════════════════════════════════════════════
+function showView(id) {
+  document.querySelectorAll(".view").forEach(v => {
+    v.classList.remove("active");
+  });
+  document.getElementById(id).classList.add("active");
+  if (id === "v3") document.getElementById("v3scrl").scrollTop = 0;
 }
-function updatePinDots(){
-  for(let i=0;i<4;i++){
-    const d=document.getElementById("pd"+i);
-    d.classList.toggle("filled",i<PIN_BUF.length);
-    d.classList.remove("err");
+
+function goBack(id) {
+  showView(id);
+  if (id === "v2") loadIsler(SEL.tezgah);
+}
+
+// ══════════════════════════════════════════════
+// TAB
+// ══════════════════════════════════════════════
+function goTab(name) {
+  ["uret","durus","kal"].forEach(t => {
+    document.getElementById("panel_"+t).classList.toggle("on", t===name);
+    document.getElementById("tab_"+t).classList.toggle("on", t===name);
+    const bn = document.getElementById("bnav_"+t);
+    if (bn) bn.classList.toggle("on", t===name);
+  });
+  document.getElementById("v3scrl").scrollTop = 0;
+}
+
+// ══════════════════════════════════════════════
+// SETUP
+// ══════════════════════════════════════════════
+function openSetup() {
+  document.getElementById("setup_url").value = CFG.url || "";
+  document.getElementById("setup_tez").value = (CFG.tezgahlar||[]).join(",");
+  document.getElementById("setupOverlay").classList.add("on");
+}
+function closeSetup() {
+  document.getElementById("setupOverlay").classList.remove("on");
+}
+function saveSetup() {
+  const url = document.getElementById("setup_url").value.trim();
+  const tez = document.getElementById("setup_tez").value.split(",").map(s=>s.trim()).filter(Boolean);
+  CFG.url = url || DEFAULT_URL;
+  CFG.tezgahlar = tez;
+  localStorage.setItem("aps_cfg", JSON.stringify(CFG));
+  closeSetup();
+  buildTezgahlar();
+  toast("Kaydedildi ✓", "ok");
+}
+
+// ══════════════════════════════════════════════
+// PIN / GİRİŞ
+// ══════════════════════════════════════════════
+function pinKey(d) {
+  if (PIN.length >= 4) return;
+  PIN += String(d);
+  updateDots();
+  if (PIN.length === 4) setTimeout(doLogin, 120);
+}
+function pinDel() {
+  PIN = PIN.slice(0,-1);
+  updateDots();
+  document.getElementById("login_err").textContent = "";
+}
+function updateDots(isErr) {
+  for (let i=0; i<4; i++) {
+    const d = document.getElementById("pd"+i);
+    d.classList.toggle("on", i < PIN.length && !isErr);
+    d.classList.toggle("err", !!isErr);
   }
 }
-async function doLogin(){
-  const u=document.getElementById("loginUser").value.trim();
-  if(!u){ document.getElementById("loginErr").textContent="Kullanıcı adı girin"; return; }
-  if(PIN_BUF.length<4){ document.getElementById("loginErr").textContent="4 haneli PIN girin"; return; }
-  setLoading("btnLogin",true);
-  try{
-    const r=await api({action:"login",kullanici:u,pin:PIN_BUF});
-    if(r.ok){
-      USER={kullanici:r.kullanici,adSoyad:r.adSoyad,tezgahlar:r.tezgahlar};
-      localStorage.setItem("aps_user",JSON.stringify(USER));
-      enterApp(); toast(r.msg,"ok");
+
+async function doLogin() {
+  const user = document.getElementById("inp_user").value.trim();
+  if (!user) {
+    document.getElementById("login_err").textContent = "Kullanıcı adı girin";
+    return;
+  }
+  if (PIN.length < 4) {
+    document.getElementById("login_err").textContent = "4 haneli PIN girin";
+    return;
+  }
+  setLoading("btn_login", true);
+  try {
+    const r = await call({ action:"login", kullanici:user, pin:PIN });
+    if (r.ok) {
+      USER = { kullanici:r.kullanici, adSoyad:r.adSoyad, tezgahlar:r.tezgahlar };
+      localStorage.setItem("aps_user", JSON.stringify(USER));
+      enterApp();
+      toast("Hoş geldiniz, " + r.adSoyad, "ok");
     } else {
-      document.getElementById("loginErr").textContent=r.msg;
-      for(let i=0;i<4;i++) document.getElementById("pd"+i).classList.add("err");
-      PIN_BUF=""; setTimeout(updatePinDots,600);
+      document.getElementById("login_err").textContent = r.msg || "Hatalı giriş";
+      updateDots(true);
+      PIN = "";
+      setTimeout(() => { updateDots(false); }, 600);
     }
-  }catch(e){ document.getElementById("loginErr").textContent=e.message; }
-  setLoading("btnLogin",false);
-}
-function enterApp(){
-  SEL.personel=USER.adSoyad;
-  document.getElementById("welcomeName").textContent=USER.adSoyad;
-  buildTezgahlar(); goView("v1");
-}
-function logout(){
-  if(!confirm("Çıkış yapmak istiyor musunuz?")) return;
-  USER=null; AKTIF=null;
-  localStorage.removeItem("aps_user"); localStorage.removeItem("aps_aktif");
-  PIN_BUF=""; updatePinDots();
-  document.getElementById("loginUser").value="";
-  document.getElementById("loginErr").textContent="";
-  goView("v0");
-}
-
-// Manuel iş emri — TEZGAH_PLAN'da olmayan işler için
-function manuelBasla(){
-  const isEmri = document.getElementById("manuelIsEmri").value.trim().toUpperCase();
-  if(!isEmri){ toast("İş emri no girin!","err"); return; }
-  // Sahte bir isData oluştur
-  SEL.isEmri = isEmri;
-  SEL.isData = { isEmri, parca:"", planQty:0, actual:0, kalan:0, termin:"", durum:"YENİ", acik:false };
-  document.getElementById("manuelIsEmri").value = "";
-  // Detay ekranını aç
-  isDataGoster(SEL.isData);
-  goView("v3");
-}
-
-function isDataGoster(is){
-  const live = AKTIF && AKTIF.isEmri===is.isEmri && AKTIF.tezgah===SEL.tezgah;
-  document.getElementById("v3mach").textContent = SEL.tezgah;
-  document.getElementById("v3isno").textContent = is.isEmri;
-  document.getElementById("d_no").textContent   = is.isEmri;
-  document.getElementById("d_parca").textContent = is.parca || "—";
-  document.getElementById("d_plan").textContent  = is.planQty || "—";
-  document.getElementById("d_uret").textContent  = is.actual  || 0;
-  document.getElementById("d_kal").textContent   = is.kalan;
-  document.getElementById("d_dur").textContent   = is.durum   || "—";
-  const term = is.termin || "—";
-  document.getElementById("d_term").textContent  = term;
-  const pct = is.planQty>0 ? Math.min(100,Math.round(is.actual/is.planQty*100)) : 0;
-  document.getElementById("d_pfill").style.width = pct + "%";
-  if(is.termin){
-    const [d,m,y] = is.termin.split(".");
-    const diff = (new Date(y,m-1,d) - new Date()) / 86400000;
-    document.getElementById("d_term").className = "hfield-v" + (diff<0?" danger":diff<3?" warn":" ok");
+  } catch(e) {
+    document.getElementById("login_err").textContent = "Bağlantı hatası: " + e.message;
   }
-  if(live){ setLiveMode(true); } else { setLiveMode(false); }
-  NVALS = {u:"0",o:"0",r:"0"};
-  ["np_uret","np_olc","np_red"].forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent="0"; });
-  K_TIP="KALİTE"; K_SONUC="ONAY";
-  document.querySelectorAll(".sonuc-btn").forEach(b=>b.classList.remove("sel-ok","sel-red","sel-sar"));
-  document.getElementById("ks-onay").classList.add("sel-ok");
-  document.querySelectorAll(".dkod").forEach(b=>b.classList.remove("sel"));
-  const ilkDkod = document.querySelector(".dkod");
-  if(ilkDkod) ilkDkod.classList.add("sel");
-  SEL_DURUS = "D01";
-  goTab("uret");
+  setLoading("btn_login", false);
 }
-  const liste=(USER&&USER.tezgahlar&&USER.tezgahlar.length)?USER.tezgahlar:
-              (CFG.tezgahlar.length?CFG.tezgahlar:TEZGAHLAR_DEF);
-  document.getElementById("tgrid").innerHTML=liste.map(t=>{
-    const live=AKTIF&&AKTIF.tezgah===t;
-    return `<button class="tcard${live?' live':''}" onclick="tezgahSec('${t}')">
-      <div class="tcard-name">${t}</div>
-      <div class="tcard-sub"><span class="tcard-dot${live?' on':''}"></span>${live?'AKTİF İŞ':'BOŞ'}</div>
+
+function enterApp() {
+  SEL.personel = USER.adSoyad;
+  document.getElementById("v1_name").textContent = USER.adSoyad;
+  buildTezgahlar();
+  showView("v1");
+}
+
+function doLogout() {
+  if (!confirm("Çıkış yapılsın mı?")) return;
+  USER = null; AKTIF = null;
+  localStorage.removeItem("aps_user");
+  localStorage.removeItem("aps_aktif");
+  PIN = ""; updateDots();
+  document.getElementById("inp_user").value = "";
+  document.getElementById("login_err").textContent = "";
+  showView("v0");
+}
+
+// ══════════════════════════════════════════════
+// TEZGAH
+// ══════════════════════════════════════════════
+function buildTezgahlar() {
+  const liste = (USER&&USER.tezgahlar&&USER.tezgahlar.length) ? USER.tezgahlar :
+                (CFG.tezgahlar.length ? CFG.tezgahlar : TEZGAH_DEF);
+  document.getElementById("tgrid").innerHTML = liste.map(t => {
+    const live = AKTIF && AKTIF.tezgah === t;
+    return `<button class="tcard${live?' live':''}" onclick="tezgahSec('${t.replace(/'/g,"\\'")}')">
+      <div class="tcard-name">${t.split('(')[0].trim()}</div>
+      <div class="tcard-sub"><span class="dot${live?' on':''}"></span>${live?'AKTİF İŞ':'BOŞ'}</div>
     </button>`;
   }).join("");
 }
 
-function buildDuruslar(){
-  document.getElementById("dkodGrid").innerHTML = DURUSLAR.map(d=>
-    `<button class="dkod${d.k===SEL_DURUS?' sel':''}" onclick="selDurus('${d.k}',this)">
-      <div class="dkod-code">${d.k}</div>
-      <div class="dkod-desc">${d.d}</div>
-    </button>`
-  ).join("");
-}
-
-function selDurus(k,el){
-  SEL_DURUS=k;
-  document.querySelectorAll(".dkod").forEach(x=>x.classList.remove("sel"));
-  el.classList.add("sel");
-}
-
-// ── CLOCK ─────────────────────────────
-function startClock(){
-  const upd=()=>{
-    const n=new Date();
-    const t=n.toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"});
-    const d=n.toLocaleDateString("tr-TR",{weekday:"short",day:"numeric",month:"short"});
-    ["v0clock","v1clock","v2clock","v3clock"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t;});
-    const ds=document.getElementById("v1date");if(ds)ds.textContent=d;
-    const d0=document.getElementById("v0date");if(d0)d0.textContent=d;
-  };
-  upd(); setInterval(upd,5000);
-}
-
-// ── NAVIGATION ────────────────────────
-function goView(id){
-  document.querySelectorAll(".view").forEach(v=>{v.classList.remove("on");});
-  document.getElementById(id).classList.add("on");
-  if(id==="v3") document.getElementById("v3scrl").scrollTop=0;
-}
-function geri(id){ goView(id); if(id==="v2") loadIsler(SEL.tezgah); }
-
-function goTab(name){
-  ["uret","durus","kal"].forEach(t=>{
-    document.getElementById("panel-"+t).classList.toggle("on",t===name);
-    document.getElementById("tab-"+t).classList.toggle("on",t===name);
-  });
-  document.getElementById("v3scrl").scrollTop=0;
-}
-
-// ── TEZGAH SEÇ ────────────────────────
-async function tezgahSec(t){
-  SEL.tezgah=t; SEL.personel=USER?USER.adSoyad:"";
-  document.getElementById("v2mach").textContent=t;
-  document.getElementById("v2content").innerHTML='<div class="empty">Yükleniyor...</div>';
-  goView("v2");
+async function tezgahSec(t) {
+  SEL.tezgah = t;
+  document.getElementById("v2_mach").textContent = t;
+  document.getElementById("v2_content").innerHTML = '<div class="empty">Yükleniyor...</div>';
+  showView("v2");
   await loadIsler(t);
 }
 
-async function loadIsler(t){
-  // Önbellekten hızlı göster
-  const cacheKey = "aps_isler_" + t;
+// ══════════════════════════════════════════════
+// İŞ LİSTESİ
+// ══════════════════════════════════════════════
+async function loadIsler(t) {
   try {
-    const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-    if (cached && cached.ts && (Date.now() - cached.ts) < 300000) { // 5 dk geçerli
-      IS_LIST = cached.data;
-      renderIsler();
-    }
-  } catch(e) {}
-
-  // Arka planda güncelle
-  try {
-    const r = await api({action:"getIsEmrileri", tezgah:t});
-    IS_LIST = r.isler || [];
-    localStorage.setItem(cacheKey, JSON.stringify({ts: Date.now(), data: IS_LIST}));
+    const r = await call({ action:"getIsEmrileri", tezgah:t });
+    ISLER = r.isler || [];
     renderIsler();
   } catch(e) {
-    if (!IS_LIST.length) {
-      document.getElementById("v2content").innerHTML =
-        `<div class="empty">
-          <div style="font-size:32px;margin-bottom:12px">⚠</div>
-          <div style="font-size:14px;margin-bottom:8px">Bağlantı kurulamadı</div>
-          <div style="font-size:12px;color:var(--tx3);margin-bottom:16px">${e.message}</div>
-          <button onclick="loadIsler('${t}')" style="background:var(--s2);border:1px solid var(--bd2);border-radius:var(--r8);padding:10px 20px;color:var(--tx);font-family:inherit;font-size:14px;cursor:pointer;">Tekrar Dene</button>
-        </div>`;
-    } else {
-      toast("Bağlantı hatası — önbellek gösteriliyor", "");
-    }
+    document.getElementById("v2_content").innerHTML =
+      `<div class="empty">⚠ Bağlantı hatası<br><small>${e.message}</small><br><br>
+      <button onclick="loadIsler('${t}')" style="background:var(--s2);border:1px solid var(--bd2);border-radius:var(--r8);padding:10px 20px;color:var(--tx);font-family:inherit;font-size:14px;cursor:pointer;">Tekrar Dene</button></div>`;
   }
 }
 
-function renderIsler(){
-  const el = document.getElementById("v2content");
-  if(!IS_LIST.length){
-    el.innerHTML=`<div class="empty">
-      <div style="font-size:28px;margin-bottom:10px">📋</div>
-      <div style="font-size:14px;margin-bottom:6px">Planlanmış iş emri yok</div>
-      <div style="font-size:12px;color:var(--tx3)">Yukarıdan manuel iş emri girebilirsiniz</div>
-    </div>`;
+function renderIsler() {
+  const el = document.getElementById("v2_content");
+  if (!ISLER.length) {
+    el.innerHTML = `<div class="empty">📋 Planlanmış iş yok<br><small style="color:var(--tx3)">Yukarıdan manuel başlatabilirsiniz</small></div>`;
     return;
   }
-  const total=IS_LIST.length, live=IS_LIST.filter(i=>i.acik).length;
-  el.innerHTML = `<div class="mach-hero">
-    <div class="mach-nm">${SEL.tezgah}</div>
-    <div class="mach-stats">
-      <div class="mach-stat">Toplam: <b>${total}</b></div>
-      <div class="mach-stat">Aktif: <b>${live}</b></div>
-    </div>
-  </div>
-  <input class="srch" id="srch" placeholder="İş emri ara..." oninput="filterIsler(this.value)">
-  <div id="isCards">${buildIsCards(IS_LIST)}</div>`;
-}
-
-function filterIsler(q){
-  const arr = q ? IS_LIST.filter(i=>i.isEmri.includes(q.toUpperCase())||i.parca.includes(q.toUpperCase())) : IS_LIST;
-  document.getElementById("isCards").innerHTML = buildIsCards(arr);
-}
-
-function buildIsCards(arr){
-  return arr.map((is,idx)=>{
-    const live = AKTIF&&AKTIF.isEmri===is.isEmri&&AKTIF.tezgah===SEL.tezgah;
-    const pct = is.planQty>0?Math.min(100,Math.round(is.actual/is.planQty*100)):0;
-    const badge = live?'<span class="badge b-live">● AKTİF</span>':
-                  is.prodStart?'<span class="badge b-cont">DEVAM</span>':
+  el.innerHTML = ISLER.map((is, i) => {
+    const live = AKTIF && AKTIF.isEmri === is.isEmri && AKTIF.tezgah === SEL.tezgah;
+    const pct = is.planQty > 0 ? Math.min(100, Math.round(is.actual/is.planQty*100)) : 0;
+    const badge = live ? '<span class="badge b-live">● AKTİF</span>' :
+                  is.prodStart ? '<span class="badge b-cont">DEVAM</span>' :
                   '<span class="badge b-new">YENİ</span>';
-    const realIdx = IS_LIST.indexOf(is);
-    return `<div class="icard${live?' live':''}" onclick="isemriSec(${realIdx})">
+    return `<div class="icard${live?' live':''}" onclick="isemriSec(${i})">
       <div class="icard-bar"></div>
       <div class="icard-body">
         <div class="icard-top"><div class="icard-no">${is.isEmri}</div>${badge}</div>
         <div class="icard-parca">${is.parca||'—'}</div>
-        <div class="icard-nums">
+        <div class="inums">
           <div class="inum"><div class="inum-v">${is.planQty||'—'}</div><div class="inum-l">Plan</div></div>
           <div class="inum"><div class="inum-v ok">${is.actual||0}</div><div class="inum-l">Üretilen</div></div>
           <div class="inum"><div class="inum-v warn">${is.kalan}</div><div class="inum-l">Kalan</div></div>
-          <div class="inum"><div class="inum-v" style="font-size:14px;color:var(--tx2)">${is.termin||'—'}</div><div class="inum-l">Termin</div></div>
+          <div class="inum"><div class="inum-v" style="font-size:13px;color:var(--tx2)">${is.termin||'—'}</div><div class="inum-l">Termin</div></div>
         </div>
         <div class="pbar"><div class="pfill" style="width:${pct}%"></div></div>
       </div>
@@ -769,171 +728,258 @@ function buildIsCards(arr){
   }).join("");
 }
 
-// ── İŞ EMRİ SEÇ ──────────────────────
-function isemriSec(idx){
-  const is = IS_LIST[idx];
+function isemriSec(i) {
+  const is = ISLER[i];
   SEL.isEmri = is.isEmri;
   SEL.isData = is;
-  isDataGoster(is);
-  goView("v3");
+  openDetay(is);
 }
 
-function setLiveMode(on){
-  document.getElementById("timerBox").classList.toggle("on",on);
-  document.getElementById("blk-basla").style.display=on?"none":"";
-  document.getElementById("blk-bitir").style.display=on?"":"none";
-  if(on){ startTimer(); } else { stopTimer(); }
+function manuelBasla() {
+  const no = document.getElementById("inp_manuel").value.trim().toUpperCase();
+  if (!no) { toast("İş emri girin!", "err"); return; }
+  document.getElementById("inp_manuel").value = "";
+  SEL.isEmri = no;
+  SEL.isData = { isEmri:no, parca:"", planQty:0, actual:0, kalan:0, termin:"", durum:"YENİ", acik:false };
+  openDetay(SEL.isData);
 }
 
-// ── TIMER ─────────────────────────────
-function startTimer(){
+// ══════════════════════════════════════════════
+// DETAY EKRANI
+// ══════════════════════════════════════════════
+function openDetay(is) {
+  const live = AKTIF && AKTIF.isEmri === is.isEmri && AKTIF.tezgah === SEL.tezgah;
+
+  document.getElementById("v3_mach").textContent = SEL.tezgah;
+  document.getElementById("v3_isno").textContent = is.isEmri;
+  document.getElementById("d_no").textContent    = is.isEmri;
+  document.getElementById("d_parca").textContent = is.parca || "—";
+  document.getElementById("d_plan").textContent  = is.planQty || "—";
+  document.getElementById("d_uret").textContent  = is.actual || 0;
+  document.getElementById("d_kal").textContent   = is.kalan;
+  document.getElementById("d_dur").textContent   = is.durum || "—";
+  document.getElementById("d_term").textContent  = is.termin || "—";
+
+  // Termin rengi
+  if (is.termin) {
+    try {
+      const [d,m,y] = is.termin.split(".");
+      const diff = (new Date(y,m-1,d) - new Date()) / 86400000;
+      document.getElementById("d_term").className = "hf-v" + (diff<0?" danger":diff<3?" warn":" ok");
+    } catch(e) {}
+  }
+
+  // Progress
+  const pct = is.planQty>0 ? Math.min(100, Math.round(is.actual/is.planQty*100)) : 0;
+  document.getElementById("d_pfill").style.width = pct + "%";
+
+  // Reset numpad
+  ["u","h","o","r"].forEach(k => { NV[k]="0"; const el=document.getElementById("np_"+k); if(el) el.textContent="0"; });
+
+  // Kalite reset
+  K_TIP = "KALİTE (ÖLÇÜM)"; K_SON = "ONAY";
+  document.querySelectorAll("#ktip_row .sonuc-btn").forEach((b,i) => b.className = "sonuc-btn" + (i===0?" s-ok":""));
+  document.querySelectorAll("#ksonuc_row .sonuc-btn").forEach((b,i) => b.className = "sonuc-btn" + (i===0?" s-ok":""));
+
+  // Duruş reset
+  D_KOD = "D01";
+  document.querySelectorAll(".dkod").forEach(d => d.classList.toggle("on", d.dataset.k === D_KOD));
+
+  // Mod
+  if (live) {
+    setLive(true);
+  } else {
+    setLive(false);
+  }
+
+  goTab("uret");
+  showView("v3");
+}
+
+function setLive(on) {
+  document.getElementById("timerBox").classList.toggle("on", on);
+  document.getElementById("blk_basla").style.display = on ? "none" : "";
+  document.getElementById("blk_bitir").style.display = on ? "" : "none";
+  if (on) startTimer();
+  else stopTimer();
+}
+
+// ══════════════════════════════════════════════
+// TIMER
+// ══════════════════════════════════════════════
+function startTimer() {
   stopTimer();
-  const s = AKTIF?new Date(AKTIF.startISO):new Date();
-  document.getElementById("timerSince").textContent="Başlama: "+s.toLocaleTimeString("tr-TR");
-  timerIv=setInterval(()=>{
-    const d=Math.floor((new Date()-s)/1000);
-    document.getElementById("timerVal").textContent=`${p2(Math.floor(d/3600))}:${p2(Math.floor(d%3600/60))}:${p2(d%60)}`;
-  },1000);
+  const s = AKTIF ? new Date(AKTIF.startISO) : new Date();
+  document.getElementById("timerSince").textContent = "Başlama: " + s.toLocaleTimeString("tr-TR");
+  timerIv = setInterval(() => {
+    const d = Math.floor((new Date()-s)/1000);
+    document.getElementById("timerVal").textContent =
+      p2(Math.floor(d/3600)) + ":" + p2(Math.floor(d%3600/60)) + ":" + p2(d%60);
+  }, 1000);
 }
-function stopTimer(){ if(timerIv){clearInterval(timerIv);timerIv=null;} }
-const p2=n=>String(n).padStart(2,"0");
+function stopTimer() { if (timerIv) { clearInterval(timerIv); timerIv=null; } }
+const p2 = n => String(n).padStart(2,"0");
 
-// ── NUMPAD ────────────────────────────
-const nmap = { u:"np_uret", o:"np_olc", r:"np_red" };
-function npad(k,d){
-  if(NVALS[k]==="0") NVALS[k]=String(d);
-  else NVALS[k]+=String(d);
-  if(NVALS[k].length>6) NVALS[k]=NVALS[k].slice(0,6);
-  document.getElementById(nmap[k]).textContent=NVALS[k];
+// ══════════════════════════════════════════════
+// NUMPAD
+// ══════════════════════════════════════════════
+const nmap = { u:"np_u", h:"np_h", o:"np_o", r:"np_r" };
+function nk(k, d) {
+  if (NV[k]==="0") NV[k]=String(d); else NV[k]+=String(d);
+  if (NV[k].length > 6) NV[k] = NV[k].slice(0,6);
+  document.getElementById(nmap[k]).textContent = NV[k];
 }
-function npadDel(k){
-  NVALS[k]=NVALS[k].slice(0,-1)||"0";
-  document.getElementById(nmap[k]).textContent=NVALS[k];
+function nd(k) {
+  NV[k] = NV[k].slice(0,-1) || "0";
+  document.getElementById(nmap[k]).textContent = NV[k];
 }
-function npadSet(k,v){
-  const cur=parseInt(NVALS[k])||0;
-  NVALS[k]=String(cur+v);
-  document.getElementById(nmap[k]).textContent=NVALS[k];
+function np(k, v) {
+  NV[k] = String((parseInt(NV[k])||0) + v);
+  document.getElementById(nmap[k]).textContent = NV[k];
 }
-function npadKalan(){
-  const kal=SEL.isData?.kalan||0;
-  NVALS.u=String(kal);
-  document.getElementById("np_uret").textContent=NVALS.u;
-}
-
-// ── KALİTE ────────────────────────────
-function setKTip(v,el){
-  K_TIP=v;
-  document.querySelectorAll("#panel-kal .sonuc-row:first-of-type .sonuc-btn").forEach(b=>b.classList.remove("sel-ok","sel-red","sel-sar"));
-  el.classList.add("sel-ok");
-}
-function setKSonuc(v,el){
-  K_SONUC=v;
-  ["ks-onay","ks-red","ks-sar"].forEach(id=>document.getElementById(id).classList.remove("sel-ok","sel-red","sel-sar"));
-  el.classList.add(v==="ONAY"?"sel-ok":v==="RED"?"sel-red":"sel-sar");
+function npKalan() {
+  const kal = SEL.isData?.kalan || 0;
+  NV.u = String(kal);
+  document.getElementById("np_u").textContent = NV.u;
 }
 
-// ── API ───────────────────────────────
-async function api(payload){
-  if(!CFG.url){ openSheet(); throw new Error("Apps Script URL girilmemiş"); }
-  const r=await fetch(CFG.url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-  return r.json();
+// ══════════════════════════════════════════════
+// DURUŞ & KALİTE
+// ══════════════════════════════════════════════
+function buildDuruslar() {
+  document.getElementById("dkod_grid").innerHTML = DURUSLAR.map(d =>
+    `<button class="dkod${d.k===D_KOD?' on':''}" data-k="${d.k}" onclick="selDurus('${d.k}',this)">
+      <div class="dkod-code">${d.k}</div>
+      <div class="dkod-desc">${d.d}</div>
+    </button>`
+  ).join("");
+}
+function selDurus(k, el) {
+  D_KOD = k;
+  document.querySelectorAll(".dkod").forEach(d => d.classList.remove("on"));
+  el.classList.add("on");
+}
+function setKTip(v, el) {
+  K_TIP = v;
+  document.querySelectorAll("#ktip_row .sonuc-btn").forEach(b => b.className = "sonuc-btn");
+  el.className = "sonuc-btn s-ok";
+}
+function setKSonuc(v, el) {
+  K_SON = v;
+  document.querySelectorAll("#ksonuc_row .sonuc-btn").forEach(b => b.className = "sonuc-btn");
+  el.className = "sonuc-btn " + (v==="ONAY"?"s-ok":v==="RED"?"s-red":"s-amb");
 }
 
-// ── ACTIONS ───────────────────────────
-async function basla(){
-  setLoading("btnBasla",true);
-  try{
-    const r=await api({action:"basla",tezgah:SEL.tezgah,isEmri:SEL.isEmri,parcaNo:SEL.isData?.parca||"",personel:SEL.personel});
-    if(r.ok){
-      AKTIF={isEmri:SEL.isEmri,tezgah:SEL.tezgah,startISO:new Date().toISOString()};
-      localStorage.setItem("aps_aktif",JSON.stringify(AKTIF));
-      buildTezgahlar(); setLiveMode(true);
-      toast("Başlatıldı ✓  "+r.baslama,"ok");
-    } else toast(r.msg,"err");
-  }catch(e){ toast(e.message,"err"); }
-  setLoading("btnBasla",false);
+// ══════════════════════════════════════════════
+// EYLEMLER
+// ══════════════════════════════════════════════
+async function doBasla() {
+  setLoading("btn_basla", true);
+  try {
+    const r = await call({ action:"basla", tezgah:SEL.tezgah, isEmri:SEL.isEmri, parcaNo:SEL.isData?.parca||"", personel:SEL.personel });
+    if (r.ok) {
+      AKTIF = { isEmri:SEL.isEmri, tezgah:SEL.tezgah, startISO:new Date().toISOString() };
+      localStorage.setItem("aps_aktif", JSON.stringify(AKTIF));
+      buildTezgahlar();
+      setLive(true);
+      toast("Başlatıldı ✓  " + r.baslama, "ok");
+    } else toast(r.msg || "Hata", "err");
+  } catch(e) { toast(e.message, "err"); }
+  setLoading("btn_basla", false);
 }
 
-async function bitir(){
-  const u=parseInt(NVALS.u)||0;
-  if(!u){ toast("Üretilen adet girin!","err"); return; }
-  setLoading("btnBitir",true);
-  try{
-    const r=await api({action:"bitir",tezgah:SEL.tezgah,isEmri:SEL.isEmri,uretilen:u,hatali:parseInt(NVALS.u_h)||0,personel:SEL.personel});
-    if(r.ok){
-      toast("Tamamlandı ✓  "+r.sure,"ok");
-      AKTIF=null; localStorage.removeItem("aps_aktif");
+async function doBitir() {
+  const u = parseInt(NV.u) || 0;
+  if (!u) { toast("Üretilen adet girin!", "err"); return; }
+  setLoading("btn_bitir", true);
+  try {
+    const r = await call({ action:"bitir", tezgah:SEL.tezgah, isEmri:SEL.isEmri, uretilen:u, hatali:parseInt(NV.h)||0, personel:SEL.personel });
+    if (r.ok) {
+      toast("Tamamlandı ✓  " + r.sure, "ok");
+      AKTIF = null; localStorage.removeItem("aps_aktif");
       stopTimer(); buildTezgahlar();
-      setTimeout(()=>{ geri("v2"); },1500);
-    } else toast(r.msg,"err");
-  }catch(e){ toast(e.message,"err"); }
-  setLoading("btnBitir",false);
+      setTimeout(() => goBack("v2"), 1500);
+    } else toast(r.msg || "Hata", "err");
+  } catch(e) { toast(e.message, "err"); }
+  setLoading("btn_bitir", false);
 }
 
-async function vardiyaSonu(){
-  setLoading("btnVS",true);
-  try{
-    const r=await api({action:"vardiyaSonu",tezgah:SEL.tezgah,isEmri:SEL.isEmri});
-    if(r.ok){
-      toast("Vardiya sonu kaydedildi ✓","ok");
-      AKTIF=null; localStorage.removeItem("aps_aktif");
+async function doVardiya() {
+  setLoading("btn_vs", true);
+  try {
+    const r = await call({ action:"vardiyaSonu", tezgah:SEL.tezgah, isEmri:SEL.isEmri });
+    if (r.ok) {
+      toast("Vardiya sonu kaydedildi ✓", "ok");
+      AKTIF = null; localStorage.removeItem("aps_aktif");
       stopTimer(); buildTezgahlar();
-      setTimeout(()=>{ geri("v2"); },1500);
-    } else toast(r.msg,"err");
-  }catch(e){ toast(e.message,"err"); }
-  setLoading("btnVS",false);
+      setTimeout(() => goBack("v2"), 1500);
+    } else toast(r.msg || "Hata", "err");
+  } catch(e) { toast(e.message, "err"); }
+  setLoading("btn_vs", false);
 }
 
-async function kaydetDurus(){
-  setLoading("btnDurus",true);
-  try{
-    const r=await api({action:"durus",tezgah:SEL.tezgah,isEmri:SEL.isEmri,durusKod:SEL_DURUS,personel:SEL.personel,aciklama:document.getElementById("d_not").value.trim()});
-    if(r.ok){ toast("Duruş kaydedildi ✓","ok"); document.getElementById("d_not").value=""; }
-    else toast(r.msg,"err");
-  }catch(e){ toast(e.message,"err"); }
-  setLoading("btnDurus",false);
+async function doDurus() {
+  setLoading("btn_durus", true);
+  try {
+    const r = await call({ action:"durus", tezgah:SEL.tezgah, isEmri:SEL.isEmri, durusKod:D_KOD, personel:SEL.personel, aciklama:document.getElementById("d_acik").value.trim() });
+    if (r.ok) { toast("Duruş kaydedildi ✓", "ok"); document.getElementById("d_acik").value=""; }
+    else toast(r.msg || "Hata", "err");
+  } catch(e) { toast(e.message, "err"); }
+  setLoading("btn_durus", false);
 }
 
-async function kaydetKal(){
-  setLoading("btnKal",true);
-  try{
-    const r=await api({action:"kalite",tezgah:SEL.tezgah,isEmri:SEL.isEmri,tip:K_TIP,parcaNo:SEL.isData?.parca||"",olculen:parseInt(NVALS.o)||0,reddedilen:parseInt(NVALS.r)||0,sonuc:K_SONUC,aciklama:document.getElementById("k_not").value.trim(),personel:SEL.personel});
-    if(r.ok){
-      toast("Kalite kaydedildi ✓","ok");
-      NVALS.o="0"; NVALS.r="0";
-      document.getElementById("np_olc").textContent="0";
-      document.getElementById("np_red").textContent="0";
-      document.getElementById("k_not").value="";
-    } else toast(r.msg,"err");
-  }catch(e){ toast(e.message,"err"); }
-  setLoading("btnKal",false);
+async function doKalite() {
+  const o = parseInt(NV.o) || 0;
+  if (!o) { toast("Ölçülen adet girin!", "err"); return; }
+  setLoading("btn_kal", true);
+  try {
+    const r = await call({ action:"kalite", tezgah:SEL.tezgah, isEmri:SEL.isEmri, tip:K_TIP, parcaNo:SEL.isData?.parca||"", olculen:o, reddedilen:parseInt(NV.r)||0, sonuc:K_SON, aciklama:document.getElementById("k_acik").value.trim(), personel:SEL.personel });
+    if (r.ok) {
+      toast("Kalite kaydedildi ✓", "ok");
+      NV.o="0"; NV.r="0";
+      document.getElementById("np_o").textContent="0";
+      document.getElementById("np_r").textContent="0";
+      document.getElementById("k_acik").value="";
+    } else toast(r.msg || "Hata", "err");
+  } catch(e) { toast(e.message, "err"); }
+  setLoading("btn_kal", false);
 }
 
-// ── SETUP ─────────────────────────────
-function openSheet(){ document.getElementById("sheetBg").classList.add("on"); }
-function closeSheet(e){ if(e.target===document.getElementById("sheetBg")) document.getElementById("sheetBg").classList.remove("on"); }
-function saveSheet(){
-  CFG.url=document.getElementById("cfg_url").value.trim();
-  CFG.tezgahlar=document.getElementById("cfg_tez").value.split(",").map(s=>s.trim()).filter(Boolean);
-  localStorage.setItem("aps_cfg",JSON.stringify(CFG));
-  document.getElementById("sheetBg").classList.remove("on");
-  buildTezgahlar(); toast("Kaydedildi ✓","ok");
+// ══════════════════════════════════════════════
+// API
+// ══════════════════════════════════════════════
+async function call(payload) {
+  const url = CFG.url;
+  if (!url || url === "BURAYA_SCRIPT_URL_YAZIN") {
+    openSetup();
+    throw new Error("Script URL girilmemiş — Ayarlar'dan girin");
+  }
+  const resp = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  if (!resp.ok) throw new Error("HTTP " + resp.status);
+  return resp.json();
 }
 
-// ── HELPERS ───────────────────────────
-function setLoading(id,on){
-  const b=document.getElementById(id); if(!b)return;
-  b.disabled=on;
-  if(on){ b._t=b.innerHTML; b.innerHTML='<div class="spin-sm"></div>'; }
-  else if(b._t) b.innerHTML=b._t;
+// ══════════════════════════════════════════════
+// YARDIMCI
+// ══════════════════════════════════════════════
+function setLoading(id, on) {
+  const b = document.getElementById(id);
+  if (!b) return;
+  b.disabled = on;
+  if (on) { b._t = b.innerHTML; b.innerHTML = '<div class="spin"></div>'; }
+  else if (b._t) b.innerHTML = b._t;
 }
-let toastT=null;
-function toast(msg,type=""){
-  const el=document.getElementById("toast");
-  el.textContent=msg; el.className="toast on "+(type||"");
-  if(toastT)clearTimeout(toastT);
-  toastT=setTimeout(()=>el.className="toast",3000);
+let toastT = null;
+function toast(msg, type="") {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast on " + type;
+  if (toastT) clearTimeout(toastT);
+  toastT = setTimeout(() => el.className = "toast", 3200);
 }
 </script>
 </body>
